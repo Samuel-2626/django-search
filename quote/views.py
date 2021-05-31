@@ -34,7 +34,7 @@ class SearchResultsList(ListView):
 
 #   def get_queryset(self):
 #     query = self.request.GET.get('q')
-#     return QuoteTaking.objects.filter(name__search=query)
+#     return QuoteTaking.objects.filter(quote__search=query)
 
 
 """ Filter on a combination of fields in our database  """

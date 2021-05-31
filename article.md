@@ -20,10 +20,10 @@ In this tutorial, we will be adding a basic search feature and scaling it up to 
 
 By the end of this tutorial, you should be able to:
 
-1. Setup a basic search feature using the Q objects module.
-2. add full-text search to your app.
-3. Stem and rank your query result.
-4. And finally add weights to your queries.
+1. Setup a basic search feature using the Q objects module,
+2. add full-text search to your app,
+3. stem and rank your query result,
+4. add weights to your queries.
 
 ## Project Setup and Overview
 
@@ -46,16 +46,42 @@ docker-compose up -d --build
 Next, apply the migrations:
 
 ```
-docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
 ```
 
-Once the build is complete, navigate to `http://127.0.0.1:8000/quotes/` to ensure the app works as expected. You should see the following HTML page. Your own database would be empty.
+Next, create a superuser:
+
+```
+docker-compose exec web python manage.py createsuperuser
+```
+
+Once it has been created, navigate to `http://127.0.0.1:8000/quotes/` to ensure the app works as expected. You should see the following HTML page. 
 
 ![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/homepage.png)
 
 Take a look at the project structure and code before moving on.
 
-We created a basic quote taking application that you can use to practice what we will be creating. You can as well add quotes from the admin page.
+We created a basic quote taking model that we can use to practice what we will be building. 
+
+```py
+from django.db import models
+
+# new
+
+class QuoteTaking(models.Model):
+  name = models.CharField(max_length=250)
+  quote = models.TextField(max_length=1000)
+
+  def __str__(self):
+    return self.quote
+```
+
+Next, add some quotes from the admin page:
+
+![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/admin.png)
+
+![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/homepage_2.png)
+
 
 ```html
 <form action="{% url 'search_results' %}" method="get">
@@ -87,23 +113,22 @@ class SearchResultsList(ListView):
     )
 ```
 
-From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter`. When we use this filter, the query we are looking up in the database just only need to contain the word (case insensitive) even if there is little correlation between the words.
+From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter`. We could as well use other `django filter` like `startswith`.
 
-This works great if we are trying to match a string containing few characters. This becomes limited when we want to match a large block of text. To solve this we can adopt several methods, but since we are using PostgreSQL, Django provides a selection of database-specific tools to allow you to leverage more complex querying options.
+Add the code to your `views.py` under the quote app and navigate to the homepage to try it out.
 
-`Note that` Other databases have several selections of tools, maybe via plugins or user-defined functions, but Django doesn't include support for them at this point in time.
+![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/search.png)
 
-In the meantime add this code to your `views.py` under the quote app and navigate to the homepage to try it out.
 
 ## Stemming as well as ranking functionality
 
-We would be diving now into performing full-text searches.
-
-Words like __child__ and __children__ should be considered similar by any search engine right? We would be taking advantage of the __full-text search__ Django provides using the `PostgreSQL module`.
+We would be diving now into performing complex searches with PostgreSQL's full-text search feature.
 
 __Full-text search__ allows us to perform complex search lookups, retrieving results by similarity, or by weighting terms based on how frequent they appear in the text or how important different fields are.
 
-In our previous example under the __Q objects__, if we type just a letter in our search field so far that letter is found in any word in the database we are trying to match it perceives it as a good match, but this is not so right. With full-text searches, it prevents this as well as gives us other benefits by ignoring __stop words__ such as “a”, “the”, “and”.
+They are useful when you start considering large blocks of text.
+
+With full-text searches, words such as “a”, “the”, “and” are ignored. They are known as __stop words__ .
 
 To use the `search` lookup `django.contrib.postgres` must added to your `INSTALLED_APPS`list.
 
@@ -132,10 +157,10 @@ class SearchResultsList(ListView):
 
   def get_queryset(self):
     query = self.request.GET.get('q')
-    return QuoteTaking.objects.filter(name__search=query)
+    return QuoteTaking.objects.filter(quote__search=query)
 ```
 
-From the example above, we are only searching the name field in our database, we could as well search for the quote field.
+From the example above, we are only searching the quote field in our database, we could as well search using the name field.
 
 #### To filter on a combination of fields
 
@@ -182,6 +207,14 @@ From the code above, the `SearchVector` allows us to search against multiple fie
 
 The `SearchRank` allows us to order the results by relevancy. It takes into account how often the query terms appear in the document, how close the terms are on the document, and how important the part of the document is where they occur.
 
+Add the code to your `views.py` under the quote app and navigate to the homepage to try it out.
+
+![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/search_2.png)
+
+If we compare the result from the __Q objects__ with the __full-text search__, there is a clear difference. In the full-text search, the query with the highest results are shown first, this is the power of the `SearchRank`.
+
+Combining these three method we get a powerful search feature.
+
 In this section, you were introduced to full-text search using the PostgreSQL module supported by Django to create complex lookups like searching similar words, ranking words, etc. In the concluding section, we would add weights to our fields in the database.
 
 ## Adding weights to our queries
@@ -213,6 +246,8 @@ From the code above, we added weights to the `SearchVector` using the __name__ a
 
 In this article, we guided you through setting up a basic search feature for your Django app and then taking it up a notch to a full-text search using the PostgreSQL module.
 
-When performance starts to become a problem i.e. you are becoming to have a very large database and the full-text search starts to become slow, you can check out the [SearchVectorField](https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/search/#performance) and add it to your model.
+Read more about [Q objects](https://docs.djangoproject.com/en/3.2/topics/db/queries/#complex-lookups-with-q-objects) .
+
+Read more about [Perfomance with full-text search](https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/search/#performance) .
 
 Grab the code from the [repo](https://github.com/Samuel-2626/django-search).
