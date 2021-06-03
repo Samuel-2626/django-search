@@ -99,7 +99,7 @@ The search form would be using the `GET` method rather than the `POST` method so
 
 ## Q objects and icontains Django filter
 
-We will start off our search journey by taking a look at the __Q objects__. The __Q objects__ allow us to search words using the `"OR"` or `"AND"` logical operator. The `|` symbol represents the `"OR"` logical operator while the `&` symbol represent the `"AND"` logical operator.
+We will start off our search journey by taking a look at the __Q objects__. The __Q objects__ allow us to search words using the `"OR"` or `"AND"` logical operator. The `|` symbol represents the `"OR"` logical operator while the `&` symbol represents the `"AND"` logical operator.
 
 ```py
 from django.db.models import Q
@@ -116,7 +116,7 @@ class SearchResultsList(ListView):
     )
 ```
 
-From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter`. Therefore, the search result will only contain the word that can be found in either the name or the quote field (case insensitive).
+From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter` to check if the word is contained in the field. Therefore, the search result will only contain the word that can be found in either the name or the quote field (case insensitive).
 
 Add the code to your `views.py` under the quote app and navigate to the homepage to try it out.
 
