@@ -81,6 +81,8 @@ Next, add some quotes from the admin page:
 
 ![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/admin.png)
 
+After adding them navigate back to quote homepage.
+
 ![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/homepage_2.png)
 
 
