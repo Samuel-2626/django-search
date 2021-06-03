@@ -30,7 +30,7 @@ By the end of this tutorial, you should be able to:
 
 Clone down the base project from the [django-search](https://github.com/Samuel-2626/django-search) repo.
 
-```
+```bash
 git clone https://github.com/Samuel-2626/django-search.git
 
 cd django-search
@@ -40,19 +40,19 @@ Since we would be using PostgreSQL as our database to tap into some added featur
 
 From the project root, create the images and spin up the Docker containers.
 
-```
+```bash
 docker-compose up -d --build
 ```
 
 Next, apply the migrations:
 
-```
+```bash
 docker-compose exec web python manage.py migrate
 ```
 
 Next, create a superuser:
 
-```
+```bash
 docker-compose exec web python manage.py createsuperuser
 ```
 
@@ -86,13 +86,13 @@ After adding them navigate back to quote homepage.
 ![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/homepage_2.png)
 
 
+In our `quote.html` file, we have a basic form with a search input field.
+
 ```html
 <form action="{% url 'search_results' %}" method="get">
   <input type="search" name="q" placeholder="Search by name or quote..." class="form-control">
 </form>
 ```
-
-In our `quote.html` file, we have a basic form with a search input field.
 
 The search form would be using the `GET` method rather than the `POST` method so we can have access to the query string both in the URL and in our view `class` or `function`. Having the query string appear in the URL enables us to be able to share it with others as a link vividly. We gave our search input field a name called `q`. This would allow us to be able to reference this field in our view class later on.
 
