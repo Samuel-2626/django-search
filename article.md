@@ -1,18 +1,19 @@
-# Add search functionality to your Django app using Docker and PostgreSQL
+# Search in Django
 
 As your web app grows to include many rows in your database, adding a search functionality is a given to have.
-In this tutorial, we will be adding a basic search feature and scaling it up to a more complex search the PostgreSQL provides with the `django.contrib.postgres` module.
+In this article, we will be adding a basic search feature and scaling it up to a more complex search the PostgreSQL provides using the `django.contrib.postgres` module.
 
 ## Dependencies
 
-* Docker v19.03.8
+- Docker v19.03.8
 
 ## Contents
 
 - Objective
 - Project Setup and Overview
 - Q objects and icontains django filter
-- Stemming as well as ranking functionality
+- Understanding full-text search
+- Stemming and ranking our queries
 - Adding weights to our queries
 - Conclusion
 
@@ -35,7 +36,7 @@ git clone https://github.com/Samuel-2626/django-search.git
 cd django-search
 ```
 
-Since we would be using PostgreSQL as our database to tap into some added features it provides, we would be using Docker as it is easy to set up and configure with it.
+Since we would be using PostgreSQL as our database to tap into some added features it provides, we would be using Docker as it's easy to set up and configure with it.
 
 From the project root, create the images and spin up the Docker containers.
 
@@ -61,7 +62,7 @@ Once it has been created, navigate to `http://127.0.0.1:8000/quotes/` to ensure 
 
 Take a look at the project structure and code before moving on.
 
-We created a basic quote taking model that we can use to practice what we will be building. 
+We created a basic quote-taking model that we can use to practice what we will be building. 
 
 ```py
 from django.db import models
@@ -96,7 +97,7 @@ The search form would be using the `GET` method rather than the `POST` method so
 
 ## Q objects and icontains Django filter
 
-We will start off our search journey by taking a look at the __Q objects__. The __Q objects__ allow us to create complex lookups that can use `"OR"` not just `"AND"` logical operator. The `|` symbol represents the `"OR"` logical operator.
+We will start off our search journey by taking a look at the __Q objects__. The __Q objects__ allow us to search words using the `"OR"` or `"AND"` logical operator. The `|` symbol represents the `"OR"` logical operator while the `&` symbol represent the `"AND"` logical operator.
 
 ```py
 from django.db.models import Q
@@ -113,22 +114,21 @@ class SearchResultsList(ListView):
     )
 ```
 
-From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter`. We could as well use other `django filter` like `startswith`.
+From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter`. Therefore, the search result will only contain the word that can be found in either the name or the quote field (case insensitive).
 
 Add the code to your `views.py` under the quote app and navigate to the homepage to try it out.
 
 ![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/search.png)
 
-
-## Stemming as well as ranking functionality
-
-We would be diving now into performing complex searches with PostgreSQL's full-text search feature.
+## Full-text Search
 
 __Full-text search__ allows us to perform complex search lookups, retrieving results by similarity, or by weighting terms based on how frequent they appear in the text or how important different fields are.
 
 They are useful when you start considering large blocks of text.
 
 With full-text searches, words such as “a”, “the”, “and” are ignored. They are known as __stop words__ .
+
+## Stemming as well as ranking functionality
 
 To use the `search` lookup `django.contrib.postgres` must added to your `INSTALLED_APPS`list.
 
