@@ -1,6 +1,7 @@
 # Search in Django
 
-As your web app grows to include many rows in your database, adding a search functionality is a given to have.
+As your web app grows to include many rows in your database, adding a search functionality for your users is a given to have.
+
 In this article, we will be adding a basic search feature and scaling it up to a more complex search the PostgreSQL provides using the `django.contrib.postgres` module.
 
 ## Dependencies
@@ -104,6 +105,8 @@ We will start off our search journey by taking a look at the __Q objects__. The 
 ```py
 from django.db.models import Q
 
+# new
+
 class SearchResultsList(ListView):
   model = QuoteTaking
   context_object_name = 'quotes'
@@ -116,7 +119,7 @@ class SearchResultsList(ListView):
     )
 ```
 
-From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter` to check if the word is contained in the field. Therefore, the search result will only contain the word that can be found in either the name or the quote field (case insensitive).
+From the code above we use the filter method to filter against the **_name_** or **_quote_** field, and we also use the `icontains django filter` to check if the word is contained in the field (case insensitive). If it is contained, the field will be returned.
 
 Add the code to your `views.py` under the quote app and navigate to the homepage to try it out. In my example I searched for the word `django`
 
@@ -128,10 +131,10 @@ __Full-text search__ allows us to perform complex search lookups, retrieving res
 
 They are useful when you start considering large blocks of text.
 
-With full-text searches, words such as “a”, “the”, “and” are ignored. These words are known as __stop words__ .
+With full-text searches, words such as “a”, “the”, “and”, etc are ignored. These words are known as __stop words__ .
 
 
-To use the `search` lookup `django.contrib.postgres` must added to your `INSTALLED_APPS`list.
+To use this feature `django.contrib.postgres` must added to your `INSTALLED_APPS`list.
 
 ```py
 INSTALLED_APPS = [
@@ -168,6 +171,8 @@ From the example above, we are only searching the quote field in our database, w
 To filter on a combination of fields and on related models we use the `SearchVector` method.
 
 ```py
+from django.contrib.postgres.search import SearchVector
+
 class SearchResultsList(ListView):
   model = QuoteTaking
   context_object_name = 'quotes'
@@ -204,7 +209,7 @@ class SearchResultsList(ListView):
 
 From the code above, the `SearchVector` allows us to search against multiple fields. In our example, we are searching either the __name__ or __quote__ field.
 
-`SearchQuery` translates the words provided to us as a query from the form and passes it through the __stemming algorithm__, and then it looks for matches for all of the resulting terms. __Stemming__ is the process of reducing words to their word stem, base, or root form. Wherefore, words like *child* and *children* would be considered similar words.
+`SearchQuery` translates the words provided to us as a query from the form and passes it through a __stemming algorithm__, and then it looks for matches for all of the resulting terms. __Stemming__ is the process of reducing words to their word stem, base, or root form. Wherefore, words like *child* and *children* would be considered similar words.
 
 The `SearchRank` allows us to order the results by relevancy. It takes into account how often the query terms appear in the document, how close the terms are on the document, and how important the part of the document is where they occur.
 
@@ -212,11 +217,11 @@ Add the code to your `views.py` under the quote app and navigate to the homepage
 
 ![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/search_2.png)
 
-If we compare the result from the __Q objects__ with the __full-text search__, there is a clear difference. In the full-text search, the query with the highest results are shown first, this is the power of the `SearchRank`.
+If we compare the result from the __Q objects__ to that of the __full-text search__, there is a clear difference. In the full-text search, the query with the highest results are shown first, this is the power of the `SearchRank`.
 
 Combining these three method we get a powerful search functionality.
 
-In this section, you were introduced to full-text search using the PostgreSQL module supported by Django to create complex lookups like searching similar words, ranking words, etc. In the concluding section, we would add weights to our fields in the database.
+In this section, you were introduced to full-text search using the PostgreSQL module supported by Django to create complex lookups like searching similar words, ranking words, etc. In the concluding section, we would add weights to our queries.
 
 ## Adding weights to our queries
 
