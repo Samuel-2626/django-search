@@ -131,7 +131,7 @@ For more complex project, we would be taking a look at full-text search in the n
 
 ## Understanding full-text search
 
-__Full-text search__ allows us to perform even more complex search lookups, we can retrieve similar words. For example words like __child__ and __childern__ should be treated as similar words. We can also place more importance to a particular field in our database over others, we can as well rank our result by our relevant they are.
+__Full-text search__ allows us to perform even more complex search lookups, we can retrieve similar words. For example words like __child__ and __children__ should be treated as similar words. We can also place more importance to a particular field in our database over others, we can as well rank our result by our relevant they are.
 
 They are useful when you start considering large blocks of text.
 
@@ -194,7 +194,7 @@ From the example above we are searching the name or quote field.
 
 ## Stemming and ranking our queries
 
-__Stemming__ is the process of reducing words to their word stem, base, or root form. Wherefore, words like *child* and *children* would be considered similar words while ranking allows us to order our results by relevancy.
+__Stemming__ is the process of reducing words to their word stem, base, or root form. Wherefore, words like *child* and *children* would be considered similar words while __ranking__ allows us to order our results by relevancy.
 
 We would be combining both to make a very robust search.
 
@@ -234,7 +234,7 @@ In this section, you were introduced to full-text search using the PostgreSQL mo
 
 ## Adding weights to our queries
 
-If you want to give more importance to a particular field in your database than the order, you can add weight to your queries.
+If you want to give more importance to a particular field in your database, you can add weight to your queries.
 
 The weight should be one of the following letters D, C, B, A. By default, these weights refer to the numbers 0.1, 0.2, 0.4, and 1.0 respectively.
 
