@@ -125,14 +125,19 @@ Add the code to your `views.py` under the quote app and navigate to the homepage
 
 ![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/search.png)
 
+For hobby projects that uses the default database that comes installed with Django (sqlite3), this could be a very good way of adding a search functionality to your app. 
+
+For more complex project, we would be taking a look at full-text search in the next section.
+
 ## Understanding full-text search
 
-__Full-text search__ allows us to perform complex search lookups, retrieving results by similarity, or by weighting terms based on how frequent they appear in the text or how important different fields are.
+__Full-text search__ allows us to perform even more complex search lookups, we can retrieve similar words. For example words like __child__ and __childern__ should be treated as similar words. We can also place more importance to a particular field in our database over others, we can as well rank our result by our relevant they are.
 
 They are useful when you start considering large blocks of text.
 
-With full-text searches, words such as “a”, “the”, “and”, etc are ignored. These words are known as __stop words__ .
+With full-text search, words such as “a”, “the”, “and”, etc are ignored. These words are known as __stop words__ .
 
+Also, full-text search are case insensitive.
 
 To use this feature `django.contrib.postgres` must added to your `INSTALLED_APPS`list.
 
@@ -189,6 +194,10 @@ From the example above we are searching the name or quote field.
 
 ## Stemming and ranking our queries
 
+__Stemming__ is the process of reducing words to their word stem, base, or root form. Wherefore, words like *child* and *children* would be considered similar words while ranking allows us to order our results by relevancy.
+
+We would be combining both to make a very robust search.
+
 ```py
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
@@ -209,7 +218,7 @@ class SearchResultsList(ListView):
 
 From the code above, the `SearchVector` allows us to search against multiple fields. In our example, we are searching either the __name__ or __quote__ field.
 
-`SearchQuery` translates the words provided to us as a query from the form and passes it through a __stemming algorithm__, and then it looks for matches for all of the resulting terms. __Stemming__ is the process of reducing words to their word stem, base, or root form. Wherefore, words like *child* and *children* would be considered similar words.
+`SearchQuery` translates the words provided to us as a query from the form and passes it through a __stemming algorithm__, and then it looks for matches for all of the resulting terms.
 
 The `SearchRank` allows us to order the results by relevancy. It takes into account how often the query terms appear in the document, how close the terms are on the document, and how important the part of the document is where they occur.
 
