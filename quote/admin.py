@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import QuoteTaking
+from .models import Quote
 
 # Register your models here.
 
-admin.site.register(QuoteTaking)
+admin.site.register(Quote)
