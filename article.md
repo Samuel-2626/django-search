@@ -40,7 +40,7 @@ $ docker-compose exec web python manage.py createsuperuser
 
 Once done, navigate to [http://127.0.0.1:8000/quotes/](http://127.0.0.1:8000/quotes/) to ensure the app works as expected. You should see the following:
 
-![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/homepage.png)
+![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/v1/images/homepage.png)
 
 Take note of the `Quote` model:
 
@@ -65,7 +65,7 @@ $ add_fake_data()
 
 Once done, navigate to [http://127.0.0.1:8000/quotes/](http://127.0.0.1:8000/quotes/) to see the data.
 
-![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/main/images/homepage_2.png)
+![Quote Home Page](https://github.com/Samuel-2626/django-search/blob/v1/images/homepage_2.png)
 
 In the *quote/templates/quote.html* file, we have a basic form with a search input field:
 
@@ -104,7 +104,7 @@ Here, we used the [filter](https://docs.djangoproject.com/en/3.2/topics/db/queri
 
 Add the code to your `views.py` under the quote app and navigate to the homepage to try it out. In my example, I searched for the word `Django`.
 
-![Search Page 1](https://github.com/Samuel-2626/django-search/blob/main/images/search.png)
+![Search Page 1](https://github.com/Samuel-2626/django-search/blob/v1/images/search.png)
 
 For small data sets, this is a great way to add basic search functionality to your app. Once your data sets become large and the contents that you are searching against are also many, you'll then want to look at adding __full-text__ search.
 
@@ -128,7 +128,7 @@ In this example, bear in mind that my database has at least 10k of records, it's
 
 Another scenario is that of similar words, with the basic search only exact matches are returned. This is quite limited. With full-text search, we can have better matches as it can take into account similar words and therefore providing better results. In my database, I have a quote containing the word __pony__ and __ponies__. They should be treated as similar words but with a basic search, they are not.
 
-![Search Page 1](https://github.com/Samuel-2626/django-search/blob/main/images/search.png)
+![Search Page 1](https://github.com/Samuel-2626/django-search/blob/v1/images/search.png)
 
 And finally, in the example we say earlier in the previous section we couldn't give our users the most relevant result, this couldn't be done with just basic search, but with full-text search again it's possible.
 
@@ -170,7 +170,7 @@ class SearchResultsList(ListView):
 
 Here, we're only searching the quote field. 
 
-![Search Page 4](https://github.com/Samuel-2626/django-search/blob/main/images/search_4.png)
+![Search Page 4](https://github.com/Samuel-2626/django-search/blob/v1/images/search_4.png)
 
 As we can also see it takes account of similar words. In my search example, __ponies__ and __pony__ are treated as similar words.
 
@@ -221,7 +221,7 @@ class SearchResultsList(ListView):
 
 In this example, we took advantage of some new methods. We have seen the `SearchVector` in action earlier. The `SearchQuery` translates the words provided to us as a query from the form and passes it through a stemming algorithm and then it looks for matches for all of the resulting terms while the `SearchRank` allows us to order the results by relevancy. It takes into account how often the query terms appear in the document, how close the terms are on the document, and how important the part of the document is where they occur.
 
-![Search Page 3](https://github.com/Samuel-2626/django-search/blob/main/images/search_3.png)
+![Search Page 3](https://github.com/Samuel-2626/django-search/blob/v1/images/search_3.png)
 
 In this example, I searched for the word `django`. If we compare this result with the one we got earlier with the basic search, we could see that the fields with the highest word Django are shown first.
 
