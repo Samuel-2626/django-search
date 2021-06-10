@@ -128,11 +128,11 @@ In this example, bear in mind that my database has at least 10k of records, it's
 
 Another scenario is that of similar words, with the basic search only exact matches are returned. This is quite limited. With full-text search, we can have better matches as it can take into account similar words and therefore providing better results. In my database, I have a quote containing the word __pony__ and __ponies__. They should be treated as similar words but with a basic search, they are not.
 
-![Search Page 1](https://github.com/Samuel-2626/django-search/blob/v1/images/search.png)
+![Search Page 2](https://github.com/Samuel-2626/django-search/blob/v1/images/search_2.png)
 
-And finally, in the example we say earlier in the previous section we couldn't give our users the most relevant result, this couldn't be done with just basic search, but with full-text search again it's possible.
+And finally, in the example we saw earlier in the previous section we couldn't give our users the most relevant result, this couldn't be done with just basic search, but with full-text search again it's possible.
 
-Hence, [Full-text search](https://en.wikipedia.org/wiki/Full-text_search) is an advanced searching technique that examines all the words in every stored document as it tries to match the search criteria. In full-text search [stop words](https://www.postgresql.org/docs/current/textsearch-dictionaries.html#TEXTSEARCH-STOPWORDS) such as "a", "and", "the" are ignored because they are both common and insufficiently meaningful. In addition, with full-text search we can employ language-specific __stemming__ on the words being indexed for example the drives, drove, and driven will be recorded under the single concept word drive. [Stemming](https://en.wikipedia.org/wiki/Stemming) is the process of reducing words to their word stem, base, or root form.
+Hence, [Full-text search](https://en.wikipedia.org/wiki/Full-text_search) is an advanced searching technique that examines all the words in every stored document as it tries to match the search criteria. In full-text search [stop words](https://www.postgresql.org/docs/current/textsearch-dictionaries.html#TEXTSEARCH-STOPWORDS) such as "a", "and", "the" are ignored because they are both common and insufficiently meaningful. In addition, with full-text search we can employ language-specific __stemming__ on the words being indexed for example the word drives, drove, and driven will be recorded under the single concept word drive. [Stemming](https://en.wikipedia.org/wiki/Stemming) is the process of reducing words to their word stem, base, or root form.
 
 It suffices to say that full-text search is not perfect and one of the limitations is that it is likely to retrieve many documents that are not relevant to the intended search question such documents are called __false positives__. However, techniques such as Bayesian algorithms can help reduce the problem of __false positive__.
 
@@ -163,9 +163,9 @@ class SearchResultsList(ListView):
     context_object_name = 'quotes'
     template_name = 'search.html'
 
-  def get_queryset(self):
-      query = self.request.GET.get('q')
-      return Quote.objects.filter(quote__search=query)
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Quote.objects.filter(quote__search=query)
 ```
 
 Here, we're only searching the quote field. 
@@ -188,11 +188,11 @@ class SearchResultsList(ListView):
     context_object_name = 'quotes'
     template_name = 'search.html'
 
-  def get_queryset(self):
-      query = self.request.GET.get('q')
-      return Quote.objects.annotate(
-          search=SearchVector('name', 'quote')
-      ).filter(search=query)
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Quote.objects.annotate(
+            search=SearchVector('name', 'quote')
+        ).filter(search=query)
 ```
 
 The `Search Vector` basically gives us the ability to search against multiple fields in the table of our database. Here, we're searching against the `name` and `quote` fields.
