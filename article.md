@@ -254,6 +254,6 @@ Here, we added weights to the `SearchVector` using both the `name` and `quote` f
 
 In this article, we guided you through setting up a basic search feature for your Django app and then took it up a notch to a full-text search using the Postgres module from Django.
 
-Full-text is an intensive process, learn more about [perfomance with full-text search](https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/search/#performance).
+Full-text search is an intensive process, learn more about [perfomance with full-text search](https://docs.djangoproject.com/en/3.2/ref/contrib/postgres/search/#performance).
 
 Grab the code from the [repo](https://github.com/Samuel-2626/django-search).
