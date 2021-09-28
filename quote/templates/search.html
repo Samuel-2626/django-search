@@ -13,7 +13,7 @@
 
     <ul>
       {% for quote in quotes %}
-        <li>{{ quote }} - <b>By {{ quote.name }}</b></li>
+        <li>{{ quote.quote }} - <b>By {{ quote.name }}</b></li>
       {% empty %}
         <p>No Result was found</p>
       {% endfor %}
