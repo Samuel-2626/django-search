@@ -13,7 +13,7 @@
 
     <ul>
       {% for quote in quotes %}
-        <li>{{ quote }} - <b>By <i>{{ quote.name }}</i></b></li>
+        <li>{{ quote.quote }} - <b>By <i>{{ quote.name }}</i></b></li>
       {% empty %}
       <p>The database is empty - Add items to your database</p>
       {% endfor %}
