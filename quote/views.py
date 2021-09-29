@@ -1,4 +1,4 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, SearchHeadline
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, SearchHeadline, TrigramSimilarity
 from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
@@ -113,3 +113,23 @@ class SearchResultsList(ListView):
 #             search=search_vector,
 #             rank=SearchRank(search_vector, search_query)
 #         ).annotate(headline=search_headline).filter(search=search_query).order_by('-rank')
+
+
+""" Trigram Similarity """
+
+
+# class SearchResultsList(ListView):
+#     model = Quote
+#     context_object_name = 'quotes'
+#     template_name = 'search.html'
+
+#     def get_queryset(self):
+#         query = self.request.GET.get('q')
+
+#         print(Quote.objects.annotate(
+#             similarity=TrigramSimilarity('quote', query),
+#         ).filter(similarity__gte=0.1).order_by('-similarity').explain(analyze=True))
+
+#         return Quote.objects.annotate(
+#             similarity=TrigramSimilarity('quote', query),
+#         ).filter(similarity__gte=0.1).order_by('-similarity')
